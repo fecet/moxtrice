@@ -1,0 +1,4 @@
+.ipynb_checkpoints
+*.ipynb
+decks
+__pycache__
