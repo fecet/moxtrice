@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moxtrice"
+authors = [
+    {name = "Xie Zejian", email = "xiezej@gmail.com"},
+]
+description = "A simple CLI application that greets someone"
+readme= "README.md"
+license = {file="LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License"
+]
+dependencies = [
+    "requests",
+    "emoji",
+    "ml_collections",
+]
+
+dynamic = ["version"]
+
+[project.scripts]
+moxtrice = "moxtrice.main:absl_main"
+
+[tool.setuptools_scm]
+write_to = "moxtrice/_version.py"
+
+[project.urls]
+"Homepage" = "https://github.com/fecet/moxtrice"
+"Bug Tracker" = "https://github.com/fecet/moxtrice/issues"

@@ -1,37 +1,15 @@
-# %%
-
-from copy import deepcopy
 from dataclasses import dataclass, field
-import html
 import json
-import logging
-import os
-import os
 from pathlib import Path
-import re
-from tokenize import String
-import xml.etree.ElementTree as ET
-
-from bs4 import BeautifulSoup
-from pathvalidate import sanitize_filename
-import requests
 from typing import *
-from tqdm import tqdm
-import time
-from absl import app, flags, logging
-from ml_collections import config_flags
+import requests
+import xml.etree.ElementTree as ET
 import emoji
-
-FLAGS = flags.FLAGS
-card_name_exceptions = {"Brazen Borrower": "Brazen Borrower // Petty Theft"}
-config_flags.DEFINE_config_file(
-    "config",
-    "config.py",
-    "File path to the training hyperparameter configuration.",
-    lock_config=False,
-)
-
-# %%
+from pathvalidate import sanitize_filename
+import re
+import requests
+from absl import logging
+from .utils import _pretty_print
 
 
 @dataclass
@@ -60,7 +38,8 @@ class DeckList:
 
     def to_trice(self, trice_path=Path("decks")):
         trice_path.mkdir(parents=True, exist_ok=True)
-        for card in self.companions + self.commanders:
+        # for card in self.companions + self.commanders:
+        for card in self.commanders:
             self.sideboard.append(card)
         to_trice(
             self.mainboard,
@@ -68,6 +47,26 @@ class DeckList:
             f"{self.format}-{self.name}",
             self.description,
             trice_path=trice_path,
+        )
+
+    @staticmethod
+    def from_json(jsonGet):
+        name = jsonGet["name"]
+        description = jsonGet["description"]
+        mainboard_list = to_cards(jsonGet["mainboard"])
+        sideboard_list = to_cards(jsonGet["sideboard"])
+        # jsonGet['tokens']
+        commanders = to_cards(jsonGet["commanders"])
+        companions = to_cards(jsonGet["companions"])
+        format = jsonGet["format"]
+        return DeckList(
+            mainboard_list,
+            name,
+            description,
+            format,
+            sideboard=sideboard_list,
+            commanders=commanders,
+            companions=companions,
         )
 
 
@@ -98,16 +97,6 @@ class MoxField:
         return jsonGet
 
 
-def _pretty_print(current, parent=None, index=-1, depth=0):
-    for i, node in enumerate(current):
-        _pretty_print(node, current, i, depth + 1)
-    if parent is not None:
-        if index == 0:
-            parent.text = "\n" + ("\t" * depth)
-        else:
-            parent[index - 1].tail = "\n" + ("\t" * depth)
-        if index == len(parent) - 1:
-            current.tail = "\n" + ("\t" * (depth - 1))
 
 
 def normlize_name(name):
@@ -153,7 +142,7 @@ def to_trice(
     # ET.indent(tree, space="\t", level=0)
     # trice_path=
     fp = trice_path / f"{normlize_name(name)}.cod"
-    logging.error(f"Writing to {fp}")
+    logging.debug(f"Writing to {fp}")
     tree.write(fp, encoding="UTF-8", xml_declaration=True)
 
 
@@ -163,46 +152,3 @@ def to_cards(raw_cards: dict) -> List[MTGCard]:
         for name, attr in raw_cards.items()
     ]
     return cards
-
-
-# %%
-
-
-def main(agrv):
-    config = FLAGS.config
-    client = MoxField(config.username)
-    deck_ids = [j["publicId"] for j in client.getUserDecks()["data"]]
-
-    if config.decks:
-        deck_ids = list(set(config.decks) + set(deck_ids))
-
-    jsonGets = []
-    for deck in tqdm(deck_ids, desc="Getting data from moxfield"):
-        logging.info(f"Grabbing decklist <{deck}>")
-        jsonGet = client.getDecklist(deck)
-        jsonGets.append(jsonGet)
-        time.sleep(0.5)
-
-    for jsonGet in tqdm(jsonGets, desc="Converting deck to trice"):
-        name = jsonGet["name"]
-        description = jsonGet["description"]
-        mainboard_list = to_cards(jsonGet["mainboard"])
-        sideboard_list = to_cards(jsonGet["sideboard"])
-        # jsonGet['tokens']
-        commanders = to_cards(jsonGet["commanders"])
-        companions = to_cards(jsonGet["companions"])
-        format = jsonGet["format"]
-        # time.sleep(0.5)
-        DeckList(
-            mainboard_list,
-            name,
-            description,
-            format,
-            sideboard=sideboard_list,
-            commanders=commanders,
-            companions=companions,
-        ).to_trice()
-
-
-if __name__ == "__main__":
-    app.run(main)

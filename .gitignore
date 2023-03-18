@@ -2,3 +2,6 @@
 *.ipynb
 decks
 __pycache__
+dist
+build
+moxtrice.egg-info
