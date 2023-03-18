@@ -2,6 +2,14 @@
 
 A simple tool to synchronize between moxfield.com and cockatrice
 
+# Installation
+
+Clont it and `pip install .` or simply
+
+```
+pip install moxtrice
+```
+
 # Usage
 
 To get started, simply run the following command:
