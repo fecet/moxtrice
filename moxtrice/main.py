@@ -35,6 +35,7 @@ def main(agrv):
     client = MoxField(config.username)
     deck_ids = []
     if config.username:
+        logging.info(f"Getting lists of user {config.username}..")
         deck_ids = [j["publicId"] for j in client.getUserDecks()["data"]]
     if config.decks:
         deck_ids = list(set(config.decks+deck_ids))

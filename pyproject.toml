@@ -26,6 +26,7 @@ dynamic = ["version"]
 moxtrice = "moxtrice.main:absl_main"
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
 write_to = "moxtrice/_version.py"
 
 [project.urls]
