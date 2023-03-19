@@ -8,13 +8,16 @@ from ml_collections import config_flags
 from tqdm import tqdm
 from .core import MoxField, DeckList
 from ._version import __version__
-from .utils import redirect_to_tqdm
+from .utils import redirect_to_tqdm, relpath
 
 FLAGS = flags.FLAGS
 card_name_exceptions = {"Brazen Borrower": "Brazen Borrower // Petty Theft"}
+config_fp=(Path(__file__).parent / "config.py").resolve()
+config_fp=relpath(config_fp, Path.cwd())
+# print(config_fp)
 config_flags.DEFINE_config_file(
     "config",
-    str((Path(__file__).parent / "config.py").resolve()),
+    str(config_fp),
     "File path to the training hyperparameter configuration.",
     lock_config=False,
 )

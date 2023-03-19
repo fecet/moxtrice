@@ -3,6 +3,7 @@ from tqdm import tqdm
 from absl import logging, app
 import inspect
 from contextlib import contextmanager
+from pathlib import Path
 
 
 class _TqdmLoggingHandler(logging.PythonHandler):
@@ -17,7 +18,7 @@ class _TqdmLoggingHandler(logging.PythonHandler):
             # if self.tqdm_class == tqdm_rich:
             #     self.tqdm_class.write(msg)
             # else:
-            
+
             self.tqdm_class.write(msg, file=self.stream)
             self.flush()
         except (KeyboardInterrupt, SystemExit):
@@ -82,3 +83,15 @@ def _pretty_print(current, parent=None, index=-1, depth=0):
             parent[index - 1].tail = "\n" + ("\t" * depth)
         if index == len(parent) - 1:
             current.tail = "\n" + ("\t" * (depth - 1))
+
+
+def relpath(path_to, path_from):
+    path_to = Path(path_to).resolve()
+    path_from = Path(path_from).resolve()
+    try:
+        for p in (*reversed(path_from.parents), path_from):
+            head, tail = p, path_to.relative_to(p)
+    except ValueError:  # Stop when the paths diverge.
+        pass
+    return Path("../" * (len(path_from.parents) - len(head.parents))).joinpath(tail)
+
