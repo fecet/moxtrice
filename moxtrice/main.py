@@ -14,7 +14,7 @@ FLAGS = flags.FLAGS
 card_name_exceptions = {"Brazen Borrower": "Brazen Borrower // Petty Theft"}
 config_flags.DEFINE_config_file(
     "config",
-    str(Path(__file__).parent / "config.py"),
+    str((Path(__file__).parent / "config.py").resolve()),
     "File path to the training hyperparameter configuration.",
     lock_config=False,
 )
