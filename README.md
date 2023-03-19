@@ -16,7 +16,7 @@ To get started, simply run the following command:
 ```
 moxtrice
 ```
-By default, Moxtrice will download all public lists for the default user (me) into the current directory. You can override this by specifying a different username:
+By default, Moxtrice will download all public lists for the default user [(me)](https://www.moxfield.com/users/Facet) into the current directory. You can override this by specifying a different username:
 ```
 moxtrice --config.usernmae Yourname
 ```
@@ -35,6 +35,8 @@ decks:
 - 6KIIGaY0G0ek6Dauhj5y-g
 username: facet
 ```
+Where the code are the string follows "https://www.moxfield.com/decks/" in your decklist url.
+
 All synchronized lists are those defined in decks and all public decks from the specified user. This allows you to follow others and stay up to date.
 
 To change the directory where the downloaded decks are saved, use the following command:
@@ -66,6 +68,6 @@ the config file named `.moxtrice.yml` in your home directory("C:/Users/username"
 
 Moxtrice would not be possible without the following resources:
 
-- [moxfield]("https://www.moxfield.com/")
+- [moxfield](https://www.moxfield.com/)
 - [cockatrice](https://cockatrice.github.io/)
 - [MTG-TO-XMage](https://github.com/thebear132/MTG-To-XMage)
