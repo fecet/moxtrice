@@ -7,7 +7,7 @@ name = "moxtrice"
 authors = [
     {name = "Xie Zejian", email = "xiezej@gmail.com"},
 ]
-description = "A simple CLI application that greets someone"
+description = "A simple tool to synchronize between moxfield.com and cockatrice"
 readme= "README.md"
 license = {file="LICENSE"}
 classifiers = [

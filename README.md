@@ -58,6 +58,17 @@ username: Yourname
 
 the config file named `.moxtrice.yml` in your home directory("C:/Users/username" in Windows and "/home/usernmae" in unix-like).
 
+You can also leave decks empty by:
+```
+decks: []
+```
+
+the config file named `.moxtrice.yml` in your home directory("C:/Users/username" in Windows and "/home/usernmae" in unix-like).
+
+You can also leave decks empty by:
+`
+```
+
 # Cautions
 
 - Formats other than commander are supported, but they have not been thoroughly tested.
