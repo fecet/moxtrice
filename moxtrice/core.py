@@ -149,6 +149,10 @@ def to_trice(
 def to_cards(raw_cards: dict) -> List[MTGCard]:
     cards = [
         MTGCard(name.split(" // ")[0], attr["quantity"])
+        if not (
+            attr["card"]["layout"] == "split" or attr["card"]["layout"] == "adventure"
+        )
+        else MTGCard(name, attr["quantity"])
         for name, attr in raw_cards.items()
     ]
     return cards
