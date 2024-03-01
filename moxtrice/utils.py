@@ -1,6 +1,6 @@
 # from tqdm.rich import tqdm_rich
 from tqdm import tqdm
-from absl import logging, app
+from absl import logging
 import inspect
 from contextlib import contextmanager
 from pathlib import Path
@@ -91,7 +91,8 @@ def relpath(path_to, path_from):
     try:
         for p in (*reversed(path_from.parents), path_from):
             head, tail = p, path_to.relative_to(p)
-    except ValueError:  # Stop when the paths diverge.
-        pass
-    return Path("../" * (len(path_from.parents) - len(head.parents))).joinpath(tail)
+        logging.warn(f"head: {head}, tail: {tail}")
+    except Exception as e:  # Stop when the paths diverge.
+        logging.exception(e)
 
+    return Path("../" * (len(path_from.parents) - len(head.parents))).joinpath(tail)
