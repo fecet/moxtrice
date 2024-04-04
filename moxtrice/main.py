@@ -11,9 +11,9 @@ from ._version import __version__
 from .utils import redirect_to_tqdm, relpath
 
 FLAGS = flags.FLAGS
-card_name_exceptions = {"Brazen Borrower": "Brazen Borrower // Petty Theft"}
-config_fp=(Path(__file__).parent / "config.py").resolve()
-config_fp=relpath(config_fp, Path.cwd())
+# card_name_exceptions = {"Brazen Borrower": "Brazen Borrower // Petty Theft"}
+config_fp = (Path(__file__).parent / "config.py").resolve()
+config_fp = relpath(config_fp, Path.cwd())
 # print(config_fp)
 config_flags.DEFINE_config_file(
     "config",
@@ -41,7 +41,7 @@ def main(agrv):
         logging.info(f"Getting lists of user {config.username}..")
         deck_ids = [j["publicId"] for j in client.getUserDecks()["data"]]
     if config.decks:
-        deck_ids = list(set(config.decks+deck_ids))
+        deck_ids = list(set(config.decks + deck_ids))
 
     config_fp = Path.home() / ".moxtrice.yml"
     if not config_fp.exists():
