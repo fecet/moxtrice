@@ -18,7 +18,7 @@ moxtrice
 ```
 By default, Moxtrice will download all public lists for the default user [(me)](https://www.moxfield.com/users/Facet) into the current directory. You can override this by specifying a different username:
 ```
-moxtrice --config.usernmae Yourname
+moxtrice --config.username Yourname
 ```
 Moxtrice will create a config file if you don't already have one. The config file looks like this:
 
