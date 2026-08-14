@@ -100,9 +100,9 @@ class MoxField:
     # xmageFolderPath = ""
     def getUserDecks(self):
         url = (
-            "https://api.moxfield.com/v2/users/"
+            "https://api2.moxfield.com/v2/decks/search?includePinned=true&showIllegal=true&authorUserNames="
             + self.username
-            + "/decks?pageNumber=1&pageSize=99999"
+            + "&pageNumber=1&pageSize=99999"
         )
         # Logging
         # print(f"Grabbing <{self.username}>'s public decks from " + url)
@@ -113,7 +113,7 @@ class MoxField:
 
     def getDecklist(self, deckId):
         # https://api.moxfield.com/v2/decks/all/g5uBDBFSe0OzEoC_jRInQw
-        url = "https://api.moxfield.com/v2/decks/all/" + deckId
+        url = "https://api2.moxfield.com/v2/decks/all/" + deckId
         # print(f"Grabbing decklist <{deckId}>")                        #Logging
         r = curl_cffi.get(url, impersonate="chrome", headers={'User-Agent': user_agent_list[random.randint(0, len(user_agent_list)-1)]})
         jsonGet = json.loads(r.text)
