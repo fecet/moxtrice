@@ -18,6 +18,9 @@ import curl_cffi
 class MTGCard:
     name: str
     quantity: int
+    set_code: str = ""
+    collector_number: str = ""
+    uuid: str = ""
 
     @staticmethod
     def from_json(json: dict):
@@ -170,6 +173,12 @@ def to_trice(
         card1 = ET.SubElement(mainboard, "card")
         card1.set("number", str(card.quantity))
         card1.set("name", card.name)
+        if card.set_code:
+            card1.set("setShortName", card.set_code)
+        if card.collector_number:
+            card1.set("collectorNumber", card.collector_number)
+        if card.uuid:
+            card1.set("uuid", card.uuid)
 
     sideboard = ET.SubElement(root, "zone")
     sideboard.set("name", "side")
@@ -178,6 +187,12 @@ def to_trice(
         card1 = ET.SubElement(sideboard, "card")
         card1.set("number", str(card.quantity))
         card1.set("name", card.name)
+        if card.set_code:
+            card1.set("setShortName", card.set_code)
+        if card.collector_number:
+            card1.set("collectorNumber", card.collector_number)
+        if card.uuid:
+            card1.set("uuid", card.uuid)
 
     _pretty_print(root)
     tree = ET.ElementTree(root)
@@ -189,15 +204,25 @@ def to_trice(
 
 
 def to_cards(raw_cards: dict) -> List[MTGCard]:
-    cards = [
-        (
-            MTGCard(name.split(" // ")[0], attr["quantity"])
-            if not (
-                attr["card"]["layout"] == "split"
-                or attr["card"]["layout"] == "adventure"
-            )
-            else MTGCard(name, attr["quantity"])
-        )
-        for name, attr in raw_cards.items()
-    ]
+    cards = []
+    for name, attr in raw_cards.items():
+        # Determine the card name based on layout
+        card_name = name
+        if not (attr["card"]["layout"] == "split" or attr["card"]["layout"] == "adventure"):
+            card_name = name.split(" // ")[0]
+
+        # Extract set information
+        quantity = attr["quantity"]
+        set_code = attr["card"].get("set", "").upper()
+        collector_number = attr["card"].get("cn", "")
+        scryfall_id = attr["card"].get("scryfall_id", "")
+
+        cards.append(MTGCard(
+            name=card_name,
+            quantity=quantity,
+            set_code=set_code,
+            collector_number=collector_number,
+            uuid=scryfall_id
+        ))
+
     return cards
